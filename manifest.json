@@ -1,0 +1,19 @@
+{
+    "name": "TrelloUpgradeCard",
+    "version": "0.0.1",
+    "manifest_version": 2,
+    "browser_action": {
+        "default_title": "Add more data to Trello Cards",
+        "default_popup": "popup.html"
+    },
+    "background": {
+    	"scripts": ["background.js"],
+    	"persistent": true
+	},
+	"content_scripts": [
+    	{
+        	"matches": ["https://trello.com/*"],
+        	"js": ["content.js"]
+    	}
+	]
+}
