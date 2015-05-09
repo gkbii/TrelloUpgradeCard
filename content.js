@@ -1,15 +1,32 @@
-(function(){
-console.log("Extension Loaded");
-function applyBadge() {
-	//find badge classes
-	var badges = document.querySelectorAll(".badge .icon-description");
-	for(var i = 0; i < badges.length; i++) {
-		var descriptionNode = document.createElement("P");
-		descriptionNode.appendChild(document.createTextNode("Description"));
-		badges[i].parentElement.parentElement.parentElement.appendChild(descriptionNode);
-		badges[i].parentElement.parentElement.parentElement.style.backgroundColor = "red";
-	}
-}
+!(function(){
+    var first = true;
+    var cards;
 
-applyBadge();
+    function run() {
+        for(var i = 0; i < cards.length; i++) {
+            var currentCard = cards[i];
+            if(currentCard.desc) {
+                var url = currentCard.url.replace('https://trello.com','');
+
+                var trelloCard = document.querySelector('[href="' + url + '"]');
+                var descriptionNode = document.createElement("P");
+                descriptionNode.appendChild(document.createTextNode(currentCard.desc));
+                trelloCard.parentElement.appendChild(descriptionNode);
+            }
+        }
+    }
+
+    var httpRequest = new XMLHttpRequest();
+
+    function handleData() {
+        if(httpRequest.status == 200 && first){
+            cards = JSON.parse(httpRequest.responseText).cards;
+            first = false;
+            run();
+        }
+    }
+
+    httpRequest.onreadystatechange = handleData;
+    httpRequest.open('GET', "https://trello.com/1/Boards/mt4BLQwT?cards=visible", true);
+    httpRequest.send(null);
 })();
