@@ -1,4 +1,5 @@
 !(function(){
+
     var first = true;
     var cards;
 
@@ -9,8 +10,7 @@
                 var url = currentCard.url.replace('https://trello.com','');
 
                 var trelloCard = document.querySelector('[href="' + url + '"]');
-                var descriptionNode = document.createElement("P");
-                descriptionNode.appendChild(document.createTextNode(currentCard.desc));
+                var descriptionNode = createDescriptionNode(currentCard);
                 trelloCard.parentElement.appendChild(descriptionNode);
             }
         }
@@ -25,6 +25,31 @@
             run();
         }
     }
+
+    function createDescriptionNode(card)
+    {
+        var descriptionNode = document.createElement("P");
+        descriptionNode.style.paddingLeft = "25px";
+        descriptionNode.appendChild(document.createTextNode("Description"));
+
+        var hrNode = document.createElement('hr');
+        hrNode.style.marginTop = "5px";
+        hrNode.style.marginBottom = "5px";
+
+        descriptionNode.appendChild(hrNode);
+
+        var stringArray =  card.desc.split("\n");
+
+        descriptionNode.appendChild(document.createTextNode(stringArray[0]));
+
+        for(var i = 1; i < stringArray.length; i++) {
+            descriptionNode.appendChild(document.createElement('br'));
+            descriptionNode.appendChild(document.createTextNode(stringArray[i]));
+        }
+
+        return descriptionNode;
+    }
+
 
     httpRequest.onreadystatechange = handleData;
     httpRequest.open('GET', "https://trello.com/1/Boards/mt4BLQwT?cards=visible", true);
